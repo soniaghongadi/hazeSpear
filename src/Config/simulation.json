@@ -1,0 +1,32 @@
+{
+  "peerJS": {
+    "cloudServerName": "CloudServer",
+    "host": "localhost",
+    "port": 9000,
+    "path": "/hazespear"
+  },
+  "fog": {
+    "number": 10
+  },
+  "rabitmq": {
+    "rascalConfig": {
+      "vhosts": {
+        "v1": {
+          "connection": {
+            "slashes": true,
+            "protocol": "amqp",
+            "hostname": "localhost",
+            "port": 5672,
+            "vhost": "v1",
+            "options": {
+              "heartbeat": 60
+            },
+            "socketOptions": {
+              "timeout": 10000
+            }
+          }
+        }
+      }
+    }
+  }
+}
