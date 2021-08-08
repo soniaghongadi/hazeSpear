@@ -1,7 +1,6 @@
 import CloudServer from "./CloudServer";
 import simConfig from "./Config/simulation.json";
 import FogServer from "./FogServer";
-import startSignalServer from "./SignalServer";
 // //read from config
 // const fog = simConfig.fog;
 
@@ -15,5 +14,4 @@ import startSignalServer from "./SignalServer";
 //   fogMapper.push(new FogServer());
 // }
 // console.debug("Started fog instances");
-
-startSignalServer();
+console.log("signaling server connected");
