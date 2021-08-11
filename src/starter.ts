@@ -1,17 +1,26 @@
 import CloudServer from "./CloudServer";
 import simConfig from "./Config/simulation.json";
 import FogServer from "./FogServer";
+import "source-map-support/register";
+
 // //read from config
-// const fog = simConfig.fog;
+const fog = simConfig.fog;
+
+// verify rabitmq connection
 
 // // start a cs instance
-// let cs = new CloudServer();
+let cs = new CloudServer();
 
-// // create as many instances as listed in config
-// let fogMapper = [];
-// console.debug("Starting fog instances");
-// for (let i = 0; i < fog.number; i++) {
-//   fogMapper.push(new FogServer());
-// }
-// console.debug("Started fog instances");
+async function startFogServer() {
+  // create as many instances as listed in config
+  let fogMapper = [];
+  console.debug("Starting fog instances");
+  for (let i = 0; i < fog.number; i++) {
+    const fog = new FogServer();
+    await fog.configure();
+    fogMapper.push(new FogServer());
+  }
+  console.debug("Started fog instances");
+}
+startFogServer();
 console.log("signaling server connected");

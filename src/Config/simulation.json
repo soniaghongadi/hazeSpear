@@ -9,21 +9,14 @@
     "number": 10
   },
   "rabitmq": {
+    "directConfig": {
+      "url": "amqp://guest:guest@localhost:5672"
+    },
     "rascalConfig": {
       "vhosts": {
         "v1": {
           "connection": {
-            "slashes": true,
-            "protocol": "amqp",
-            "hostname": "localhost",
-            "port": 5672,
-            "vhost": "v1",
-            "options": {
-              "heartbeat": 60
-            },
-            "socketOptions": {
-              "timeout": 10000
-            }
+            "url": "amqp://guest:guest@localhost:5672"
           }
         }
       }

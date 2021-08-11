@@ -23,6 +23,7 @@
     "rascal": "^13.1.0",
     "simple-peer-server": "^0.0.6",
     "simple-peer-wrapper": "^0.0.2",
+    "source-map-support": "^0.5.19",
     "uuid": "^8.3.2",
     "winston": "^3.3.3",
     "wrtc": "^0.4.7"
