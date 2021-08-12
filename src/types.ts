@@ -1,39 +1,39 @@
 export type IoTMessage = {
-	messageId: number;
-	value: number;
-	timestamp: string;
+  deviceId: string;
+  value: number;
+  timestamp: string;
 };
 
 export type IoTDevice = {
-	messages: Array<IoTMessage>;
-	deviceId: string;
+  messages: Array<IoTMessage>;
+  deviceId: string;
 };
 
 export enum MESSAGETYPE {
-	REGISTER_FOG_ID,
+  REGISTER_FOG_ID,
 }
 
 export type PeerCommandMessage = {
-	messageType: MESSAGETYPE;
-	message: any;
+  messageType: MESSAGETYPE;
+  message: any;
 };
 
 export enum DeviceType {
-	FOG,
-	SENSOR,
+  FOG,
+  SENSOR,
 }
 
 export type Device = {
-	id: string;
-	deviceType: DeviceType;
-	community?: string | undefined;
+  id: string;
+  deviceType: DeviceType;
+  community?: string | undefined;
 };
 
 export type Community = {
-	device: Device;
-	id: string;
+  device: Device;
+  id: string;
 };
 
 export type FogAssignementToSensor = {
-	id: string;
+  id: string;
 };

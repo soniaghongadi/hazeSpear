@@ -6,10 +6,13 @@
     "path": "/hazespear"
   },
   "fog": {
-    "number": 10
+    "number": 10,
+    "perDeviceMessageRetentionSize": 1000,
+    "retention": false
   },
-  "sensor":{
-    "number": 200
+  "sensor": {
+    "number": 200,
+    "delayBetweenSensorAwakeInSeconds": 60
   },
   "rabitmq": {
     "directConfig": {
