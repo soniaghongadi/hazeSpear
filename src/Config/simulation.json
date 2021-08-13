@@ -1,31 +1,42 @@
 {
-  "peerJS": {
-    "cloudServerName": "CloudServer",
-    "host": "localhost",
-    "port": 9000,
-    "path": "/hazespear"
-  },
-  "fog": {
-    "number": 10,
-    "perDeviceMessageRetentionSize": 1000,
-    "retention": false
-  },
-  "sensor": {
-    "number": 200,
-    "delayBetweenSensorAwakeInSeconds": 60
-  },
-  "rabitmq": {
-    "directConfig": {
-      "url": "amqp://guest:guest@localhost:5672"
+    "formCommunity": "true",
+    "peerJS": {
+        "cloudServerName": "CloudServer",
+        "host": "localhost",
+        "port": 9000,
+        "path": "/hazespear"
     },
-    "rascalConfig": {
-      "vhosts": {
-        "v1": {
-          "connection": {
-            "url": "amqp://guest:guest@localhost:5672"
-          }
+    "fog": {
+        "retriesBeforeFail": 10,
+        "number": 5,
+        "waitForCommunitySync": 20,
+        "perDeviceMessageRetentionSize": 1000,
+        "retention": false,
+        "internetDelayLimit": {
+            "upperBound": 100,
+            "lowerBound": 200
         }
-      }
+    },
+    "sensor": {
+        "number": 20,
+        "delayBetweenSensorAwakeInSeconds": 1,
+        "tempratureGeneration": {
+            "lowestLimit": 5,
+            "highestLimit": 20
+        }
+    },
+    "rabitmq": {
+        "directConfig": {
+            "url": "amqp://guest:guest@localhost:5672"
+        },
+        "rascalConfig": {
+            "vhosts": {
+                "v1": {
+                    "connection": {
+                        "url": "amqp://guest:guest@localhost:5672"
+                    }
+                }
+            }
+        }
     }
-  }
 }

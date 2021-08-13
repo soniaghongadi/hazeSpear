@@ -1,3 +1,4 @@
+import { SimpleAppData } from "./simpleApp";
 import CloudServer from "./CloudServer";
 import simConfig from "./Config/simulation.json";
 import FogServer from "./FogServer";
@@ -9,10 +10,10 @@ const fog = simConfig.fog;
 const sensor = simConfig.sensor;
 
 // verify rabitmq connection
-
+let cs: CloudServer;
 async function startCloudServer() {
     console.log("Starting cloud server");
-    let cs = new CloudServer();
+    cs = new CloudServer();
     await cs.configure();
     console.log("Started cloud server");
 }
@@ -43,6 +44,8 @@ async function startup() {
     await startCloudServer();
     await startFogServer();
     await startSensors();
+    // create a new app
+    cs.formCommunityForApp(SimpleAppData);
 }
 
 startup();

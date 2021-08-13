@@ -45,3 +45,8 @@ export type Community = {
 export type FogAssignementToSensor = {
     id: string;
 };
+
+export const COMMANDS = {
+    FORM_COMMUNITY: "FORM_COMMUNITY",
+    SYNC_DATA: "SYNC_DATA",
+};

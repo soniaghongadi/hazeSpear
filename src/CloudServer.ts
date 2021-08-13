@@ -7,6 +7,7 @@ import {
     SimpleFogAppType,
 } from "./simpleApp";
 import {
+    COMMANDS,
     Device,
     DeviceType,
     FogAssignementToSensor,
@@ -17,7 +18,12 @@ import {
 import * as AMQPL from "amqplib";
 import simConfig from "./Config/simulation.json";
 import { DEVICE_REGISTRATION_WITH_CLOUD, SENSOR_TO_CLOUD } from "./QueueNames";
-import { getQueueForFogApp, getRandomItem, registerForQueue } from "./util";
+import {
+    getQueueForDataSync,
+    getQueueForFogApp,
+    getRandomItem,
+    registerForQueue,
+} from "./util";
 var _ = require("lodash");
 
 export default class CloudServer {
@@ -39,7 +45,6 @@ export default class CloudServer {
         );
         CloudServer.channel = await connection.createChannel();
         await this.openChannelForFogsAndSensor();
-        await this.openChannelForSensors();
     }
 
     // to be used by external API that starts community formation upon request is complete
@@ -55,7 +60,7 @@ export default class CloudServer {
         // prepare registered sensors
         if (app.SensorUsageType === SensorUsageType.RANDOM) {
             console.log("Taking random sensor for community formation");
-            const sampleSensorIds = _.sample(sensorIds, app.sensorSize);
+            const sampleSensorIds = _.sampleSize(sensorIds, app.sensorSize);
             app.SensorIds = sampleSensorIds;
         }
         // find a randomly assigned fog out of participating fog for best community formation
@@ -63,27 +68,24 @@ export default class CloudServer {
         if (app.assignedFogServerType === FogServerAssignmentType.RANDOM) {
             const pFogArray = Array.from(participatingFog);
             app.participatingFogs = pFogArray;
-            const fogToExecuteAppOn = _.sample(pFogArray);
+            const electedFog = _.sample(pFogArray);
             //form a community
             const communityId = uuidv4();
             app.communityId = communityId;
             // notifing the fog to start the execution of app
+            console.log(
+                `Forming community with fogParticipants:${participatingFog.size}, sensorSize: ${app.SensorIds}`
+            );
             CloudServer.channel.sendToQueue(
-                getQueueForFogApp(fogToExecuteAppOn),
+                getQueueForFogApp(electedFog),
                 Buffer.from(JSON.stringify(app))
             );
-        }
-    }
-
-    async openChannelForSensors() {
-        try {
-            registerForQueue(
-                CloudServer.channel,
-                SENSOR_TO_CLOUD,
-                this.onRegistrationRequestForSensor
-            );
-        } catch (error) {
-            console.error(error);
+            participatingFog.forEach((fogId) => {
+                CloudServer.channel.sendToQueue(
+                    getQueueForDataSync(fogId),
+                    Buffer.from(JSON.stringify(communityId))
+                );
+            });
         }
     }
 
@@ -97,10 +99,6 @@ export default class CloudServer {
         } catch (error) {
             console.error(error);
         }
-    }
-
-    async onRegistrationRequestForSensor(msg: AMQPL.ConsumeMessage | null) {
-        console.log("Message from Sensor for registration");
     }
 
     onRegistrationRequestFromFogAndSensor = (

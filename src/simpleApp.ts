@@ -1,4 +1,3 @@
-import { SimpleFogAppType } from "./simpleApp";
 import moment from "moment";
 import { IoTMessage } from "./types";
 export enum SensorUsageType {
@@ -16,7 +15,7 @@ export type MonitorDataProvider = (counter: number, timeTaken: number) => void;
 export type SensorDataProvider = (
     sensorId: string,
     counter: number
-) => IoTMessage;
+) => Promise<IoTMessage>;
 
 export type SimpleFogAppType = {
     SensorUsageType: SensorUsageType;
@@ -32,17 +31,17 @@ export type SimpleFogAppType = {
 export const SimpleAppData: SimpleFogAppType = {
     assignedFogServerType: FogServerAssignmentType.RANDOM,
     SensorUsageType: SensorUsageType.RANDOM,
-    sensorSize: 10,
+    sensorSize: 5, // must be less than what is there in simConfig
     SensorIds: [],
     participatingFogs: [],
-    delayBeteenTime: 2 * 60 * 1000,
+    delayBeteenTime: 30 * 1000,
     counter: 0,
     communityId: "",
 };
 
 export class SimpleApp {
     // Should be executed by the fog Server on every {@link delayBetweenTime}
-    executableAlgorithm(
+    async executableAlgorithm(
         data: SimpleFogAppType,
         getSensorData: SensorDataProvider,
         sendDataToMonitor: MonitorDataProvider
@@ -53,15 +52,15 @@ export class SimpleApp {
         const size = data.SensorIds.length;
         for (let i = 0; i < size; i++) {
             // sum of all temprature value
-            totalSensorValue += getSensorData(
-                data.SensorIds[i],
-                data.counter
-            ).value;
+            const val = (await getSensorData(data.SensorIds[i], data.counter))
+                .value;
+            if (val) totalSensorValue += val;
+            // wait and attempt to get it again in 20 millisecond
         }
-        const secondsPassed = moment().diff(starTime, "seconds");
+        const secondsPassed = moment().diff(starTime, "milliseconds");
         const averagedValue = totalSensorValue / size;
         console.log(
-            `For counter: ${data.counter}, took: ${secondsPassed} seconds, for Fogsize: ${size} with average temp value:${averagedValue}`
+            `For counter: ${data.counter}, took: ${secondsPassed} milliseconds, for Fogsize: ${size} with average temp value:${averagedValue}`
         );
         sendDataToMonitor(data.counter, secondsPassed);
     }
