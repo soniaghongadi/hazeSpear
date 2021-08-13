@@ -1,5 +1,5 @@
 {
-    "formCommunity": "true",
+    "formCommunity": true,
     "peerJS": {
         "cloudServerName": "CloudServer",
         "host": "localhost",
@@ -7,8 +7,8 @@
         "path": "/hazespear"
     },
     "fog": {
-        "retriesBeforeFail": 10,
-        "number": 5,
+        "retriesBeforeFail": 5,
+        "number": 10,
         "waitForCommunitySync": 20,
         "perDeviceMessageRetentionSize": 1000,
         "retention": false,
@@ -18,8 +18,8 @@
         }
     },
     "sensor": {
-        "number": 20,
-        "delayBetweenSensorAwakeInSeconds": 1,
+        "number": 200,
+        "delayBetweenSensorAwakeInSeconds": 0.5,
         "tempratureGeneration": {
             "lowestLimit": 5,
             "highestLimit": 20

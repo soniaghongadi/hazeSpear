@@ -31,10 +31,10 @@ export type SimpleFogAppType = {
 export const SimpleAppData: SimpleFogAppType = {
     assignedFogServerType: FogServerAssignmentType.RANDOM,
     SensorUsageType: SensorUsageType.RANDOM,
-    sensorSize: 5, // must be less than what is there in simConfig
+    sensorSize: 20, // must be less than what is there in simConfig
     SensorIds: [],
     participatingFogs: [],
-    delayBeteenTime: 30 * 1000,
+    delayBeteenTime: 1 * 1000,
     counter: 0,
     communityId: "",
 };
@@ -60,7 +60,7 @@ export class SimpleApp {
         const secondsPassed = moment().diff(starTime, "milliseconds");
         const averagedValue = totalSensorValue / size;
         console.log(
-            `For counter: ${data.counter}, took: ${secondsPassed} milliseconds, for Fogsize: ${size} with average temp value:${averagedValue}`
+            `For counter: ${data.counter}, took: ${secondsPassed} milliseconds, for sensorSize: ${size} with average temp value:${averagedValue}, participating fogSize:${data.participatingFogs.length}`
         );
         sendDataToMonitor(data.counter, secondsPassed);
     }

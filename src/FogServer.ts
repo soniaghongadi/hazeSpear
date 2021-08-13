@@ -1,3 +1,4 @@
+import moment  from 'moment';
 import { v4 as uuidv4 } from "uuid";
 import * as AMQPL from "amqplib";
 import {
@@ -24,6 +25,14 @@ import {
     SimpleApp,
     SimpleFogAppType,
 } from "./simpleApp";
+const createCsvWriter = require("csv-writer").createObjectCsvWriter;
+const csvWriter = createCsvWriter({
+    path: "results/" + moment(new Date()).format("YYYY-MM-DD-H-M-SS") + ".csv",
+    header: [
+        { id: "counter", title: "counter" },
+        { id: "timeTaken", title: "timetaken" },
+    ],
+});
 export default class FogServer {
     id: string = "";
     ioTDevices: Map<string, Array<IoTMessage>> = new Map();
@@ -176,11 +185,13 @@ export default class FogServer {
             return simulatedMessage;
             // if its a community simply get it from local storage
         };
-        const sendDataToMonitor: MonitorDataProvider = (
+        const sendDataToMonitor: MonitorDataProvider = async (
             counter: number,
             timeTaken: number
         ) => {
             console.warn(`Counter:${counter},timeTaken: ${timeTaken}`);
+            // dump data to csv file
+            await csvWriter.writeRecords([{ counter, timeTaken }]);
         };
         await this.simpleApp.executableAlgorithm(
             this.app,
