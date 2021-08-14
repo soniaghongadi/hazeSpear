@@ -1,4 +1,4 @@
-import moment  from 'moment';
+import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
 import * as AMQPL from "amqplib";
 import {
@@ -146,7 +146,7 @@ export default class FogServer {
                 setTimeout(res, timeInMilliSec);
             });
         };
-
+        let missedData = 0;
         const getSensorData: SensorDataProvider = async (
             sensorId: string,
             counter: number
@@ -165,6 +165,7 @@ export default class FogServer {
                         await delay();
                     }
                 }
+                missedData += 1;
             }
             // simulates delay to fetch data from cloud
             // below limits are taken from 100 to 200 milliseconds
@@ -198,9 +199,10 @@ export default class FogServer {
             getSensorData,
             sendDataToMonitor
         );
+        console.log("missed datapoints in community", missedData);
         this.app.counter += 1;
         //re run everything once each tick is complete
-        setTimeout(this.runApp, this.app.delayBeteenTime);
+        setTimeout(this.runApp, this.app.delayBeteenTime * 1000);
     };
 
     // form and start sync with community participants

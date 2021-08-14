@@ -1,5 +1,7 @@
 import moment from "moment";
 import { IoTMessage } from "./types";
+import simConfig from "./Config/simulation.json";
+
 export enum SensorUsageType {
     RANDOM, //calculates sensor needed at runtime
     SPECIFIED, //expected by application developer to provide
@@ -31,10 +33,10 @@ export type SimpleFogAppType = {
 export const SimpleAppData: SimpleFogAppType = {
     assignedFogServerType: FogServerAssignmentType.RANDOM,
     SensorUsageType: SensorUsageType.RANDOM,
-    sensorSize: 20, // must be less than what is there in simConfig
+    sensorSize: simConfig.simulation.sensorParticipationSize, // must be less than what is there in simConfig
     SensorIds: [],
     participatingFogs: [],
-    delayBeteenTime: 1 * 1000,
+    delayBeteenTime: simConfig.simulation.delayBetweenExecutionInSeconds,
     counter: 0,
     communityId: "",
 };

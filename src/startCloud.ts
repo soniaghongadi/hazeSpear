@@ -1,8 +1,11 @@
 import { SimpleAppData } from "./simpleApp";
-import { startCloudServer } from "./starterHelper";
+import { startCloudServer, startFogServer } from "./starterHelper";
 async function sCloud() {
     const cs = await startCloudServer();
-    cs.formCommunityForApp(SimpleAppData);
+    await startFogServer();
+    setTimeout(() => {
+        cs.formCommunityForApp(SimpleAppData);
+    }, 2000);
 }
 
 sCloud();

@@ -59,30 +59,30 @@ export default class Sensor {
     };
 
     startDataSenderToFog() {
+        let value = 1;
         this.channel.sendToQueue(
             this.fogServer,
-            Buffer.from(JSON.stringify(dataGenerator(this.id)))
+            Buffer.from(JSON.stringify(dataGenerator(this.id, value)))
         );
         setInterval(() => {
+            value += 1;
+            const generatedData = dataGenerator(this.id, value);
             this.channel.sendToQueue(
                 this.fogServer,
-                Buffer.from(JSON.stringify(dataGenerator(this.id)))
+                Buffer.from(JSON.stringify(generatedData))
             );
         }, simConfig.sensor.delayBetweenSensorAwakeInSeconds * 1000);
     }
 }
 
-let value = 0;
-
-function dataGenerator(deviceId: string): IoTMessage {
+function dataGenerator(deviceId: string, counter: number): IoTMessage {
     // generate a random sensor data
-    value = +1;
     const { lowestLimit, highestLimit } = simConfig.sensor.tempratureGeneration;
     const msg: IoTMessage = {
         deviceId,
         timestamp: Date.now().toString(),
         value: getRandomArbitrary(lowestLimit, highestLimit),
-        counter: value,
+        counter,
     };
     return msg;
 }

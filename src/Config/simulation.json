@@ -6,10 +6,15 @@
         "port": 9000,
         "path": "/hazespear"
     },
+    "simulation": {
+        "sensorParticipationSize": 20,
+        "delayBetweenExecutionInSeconds": 2,
+        "numberOfFogNode": 20,
+        "numberOfSensorNode": 100
+    },
     "fog": {
         "retriesBeforeFail": 5,
-        "number": 10,
-        "waitForCommunitySync": 20,
+        "waitForCommunitySync": 200,
         "perDeviceMessageRetentionSize": 1000,
         "retention": false,
         "internetDelayLimit": {
@@ -18,7 +23,6 @@
         }
     },
     "sensor": {
-        "number": 200,
         "delayBetweenSensorAwakeInSeconds": 0.5,
         "tempratureGeneration": {
             "lowestLimit": 5,

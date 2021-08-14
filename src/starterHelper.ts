@@ -7,6 +7,7 @@ import Sensor from "./Sensor";
 // //read from config
 const fog = simConfig.fog;
 const sensor = simConfig.sensor;
+const simulation = simConfig.simulation;
 
 export async function startCloudServer() {
     console.log("Starting cloud server");
@@ -20,7 +21,7 @@ export async function startFogServer() {
     // create as many instances as listed in config
     let fogMapper = [];
     console.debug("Starting fog instances");
-    for (let i = 0; i < fog.number; i++) {
+    for (let i = 0; i < simulation.numberOfFogNode; i++) {
         const fog = new FogServer();
         await fog.configure();
         fogMapper.push(fog);
@@ -30,8 +31,8 @@ export async function startFogServer() {
 
 export async function startSensors() {
     let sensorMapper = [];
-    console.debug("Starting fog instances");
-    for (let i = 0; i < sensor.number; i++) {
+    console.debug("Starting sensor instances");
+    for (let i = 0; i < simulation.numberOfSensorNode; i++) {
         const sensor = new Sensor();
         await sensor.configure();
         sensorMapper.push(sensor);
